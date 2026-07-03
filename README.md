@@ -1,4 +1,4 @@
-# 📊 Unemployment Analysis with Python — Dampak Covid-19 terhadap Pasar Tenaga Kerja India
+# 📊 Unemployment Analysis with Python: Dampak Covid-19 terhadap Pasar Tenaga Kerja India
 
 > Analisis data science menyeluruh terhadap dinamika tingkat pengangguran di India sebelum dan selama pandemi Covid-19, menggunakan pendekatan data cleaning, exploratory data analysis (EDA), dan analisis dampak kebijakan berbasis data.
 
@@ -11,11 +11,11 @@
 
 ## 📌 Project Overview
 
-Proyek ini menyajikan analisis kuantitatif terhadap tingkat pengangguran (*unemployment rate*) di India menggunakan dua dataset resmi yang mencakup periode Mei 2019 hingga November 2020 — rentang waktu yang secara langsung mencakup awal mula pandemi Covid-19 dan penerapan lockdown nasional di India.
+Proyek ini menyajikan analisis kuantitatif terhadap tingkat pengangguran (*unemployment rate*) di India menggunakan dua dataset resmi yang mencakup periode Mei 2019 hingga November 2020, rentang waktu yang secara langsung mencakup awal mula pandemi Covid-19 dan penerapan lockdown nasional di India.
 
 Analisis dilakukan menggunakan Python dengan pendekatan end-to-end data science: mulai dari pemahaman data (*data understanding*), pembersihan data (*data cleaning*), eksplorasi data (*exploratory data analysis*), hingga analisis dampak kebijakan (*policy impact analysis*). Proyek ini tidak hanya berhenti pada visualisasi, tetapi juga menerjemahkan temuan statistik menjadi insight yang actionable dan rekomendasi kebijakan yang realistis.
 
-Proyek ini dibangun sebagai bagian dari portofolio Data Science untuk mendemonstrasikan kemampuan dalam data wrangling, visualisasi data, statistical thinking, dan kemampuan mengomunikasikan temuan data kepada audiens non-teknis (economic storytelling) — kompetensi inti seorang Data Analyst/Data Scientist di bidang ekonomi dan kebijakan publik.
+Proyek ini dibangun sebagai bagian dari portofolio Data Science untuk mendemonstrasikan kemampuan dalam data wrangling, visualisasi data, statistical thinking, dan kemampuan mengomunikasikan temuan data kepada audiens non-teknis (economic storytelling), kompetensi inti seorang Data Analyst/Data Scientist di bidang ekonomi dan kebijakan publik.
 
 ---
 
@@ -23,7 +23,7 @@ Proyek ini dibangun sebagai bagian dari portofolio Data Science untuk mendemonst
 
 Tingkat pengangguran adalah salah satu indikator makroekonomi paling krusial dalam menilai kesehatan suatu perekonomian. Pengangguran yang tinggi berkorelasi dengan menurunnya daya beli masyarakat, meningkatnya risiko kemiskinan, serta potensi ketidakstabilan sosial-politik. Bagi pembuat kebijakan, memahami **kapan**, **di mana**, dan **seberapa besar** lonjakan pengangguran terjadi adalah prasyarat utama untuk merancang intervensi yang tepat sasaran — baik berupa bantuan sosial, stimulus ekonomi, maupun program pelatihan tenaga kerja.
 
-Pandemi Covid-19 menjadi salah satu guncangan ekonomi (*economic shock*) terbesar dalam sejarah modern, memaksa banyak negara — termasuk India — menerapkan lockdown ketat yang menghentikan aktivitas ekonomi secara mendadak. Peristiwa ini menciptakan "eksperimen alami" yang sangat berharga untuk dianalisis: bagaimana pasar tenaga kerja bereaksi terhadap guncangan eksternal berskala nasional, dan wilayah mana yang lebih rentan atau lebih resilien.
+Pandemi Covid-19 menjadi salah satu guncangan ekonomi (*economic shock*) terbesar dalam sejarah modern, memaksa banyak negara (termasuk India) menerapkan lockdown ketat yang menghentikan aktivitas ekonomi secara mendadak. Peristiwa ini menciptakan "eksperimen alami" yang sangat berharga untuk dianalisis: bagaimana pasar tenaga kerja bereaksi terhadap guncangan eksternal berskala nasional, dan wilayah mana yang lebih rentan atau lebih resilien.
 
 ---
 
