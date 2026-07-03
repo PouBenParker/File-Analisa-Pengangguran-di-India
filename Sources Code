@@ -1,0 +1,267 @@
+ANALISIS TINGKAT PENGANGGURAN DI INDIA (UNEMPLOYMENT ANALYSIS WITH PYTHON)
+
+Script ini melakukan analisis menyeluruh terhadap dua dataset pengangguran
+India:
+    1. Unemployment_in_India.csv           (Mei 2019 - Jun 2020)
+    2. Unemployment_Rate_upto_11_2020.csv  (Jan 2020 - Nov 2020)
+
+Tahapan:
+    1. Data Understanding
+    2. Data Cleaning
+    3. Exploratory Data Analysis (EDA)
+    4. Analisis Dampak Covid-19
+    5. Identifikasi Pola & Tren
+    6. Insight & Rekomendasi (dicetak sebagai ringkasan)
+
+Library yang digunakan: pandas, numpy, matplotlib, seaborn
+=============================================================================
+"""
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# -----------------------------------------------------------------------
+# Konfigurasi tampilan
+# -----------------------------------------------------------------------
+sns.set_style('whitegrid')
+plt.rcParams['figure.dpi'] = 120
+pd.set_option('display.max_columns', None)
+
+# Ubah path berikut sesuai lokasi file di komputer Anda
+PATH_DF1 = 'Unemployment_in_India.csv'
+PATH_DF2 = 'Unemployment_Rate_upto_11_2020.csv'
+
+
+# =========================================================================
+# 1. DATA UNDERSTANDING
+# =========================================================================
+def load_and_understand(path1, path2):
+    df1 = pd.read_csv(path1)
+    df2 = pd.read_csv(path2)
+
+    for name, df in [('Dataset 1', df1), ('Dataset 2', df2)]:
+        print(f'\n=== {name} ===')
+        print('Shape          :', df.shape)
+        print('Kolom          :', df.columns.tolist())
+        print('\nTipe data:\n', df.dtypes)
+        print('\nMissing values:\n', df.isnull().sum())
+        print('Jumlah duplikasi:', df.duplicated().sum())
+
+    return df1, df2
+
+
+# =========================================================================
+# 2. DATA CLEANING
+# =========================================================================
+def clean_data(df1, df2):
+    # a. Rapikan nama kolom (hapus spasi ekstra)
+    df1.columns = [c.strip() for c in df1.columns]
+    df2.columns = [c.strip() for c in df2.columns]
+
+    # b. Hapus baris yang seluruh kolomnya kosong
+    df1 = df1.dropna(how='all')
+
+    # c. Bersihkan whitespace pada kolom kategorikal/teks
+    for c in ['Region', 'Frequency', 'Area']:
+        df1[c] = df1[c].astype(str).str.strip()
+    for c in ['Region', 'Frequency', 'Region.1']:
+        df2[c] = df2[c].astype(str).str.strip()
+
+    # d. Hapus duplikasi baris yang identik
+    df1 = df1.drop_duplicates()
+    df2 = df2.drop_duplicates()
+
+    # e. Perbaiki format tanggal (asli: DD-MM-YYYY -> datetime)
+    df1['Date'] = pd.to_datetime(df1['Date'].str.strip(), format='%d-%m-%Y')
+    df2['Date'] = pd.to_datetime(df2['Date'].str.strip(), format='%d-%m-%Y')
+
+    # f. Ganti nama kolom agar ringkas & konsisten
+    rename_map = {
+        'Estimated Unemployment Rate (%)': 'Unemployment_Rate',
+        'Estimated Employed': 'Employed',
+        'Estimated Labour Participation Rate (%)': 'Labour_Participation_Rate'
+    }
+    df1 = df1.rename(columns=rename_map)
+    df2 = df2.rename(columns=rename_map).rename(columns={'Region.1': 'Zone'})
+
+    # g. Tambahkan kolom bantu waktu
+    for df in [df1, df2]:
+        df['Year'] = df['Date'].dt.year
+        df['Month'] = df['Date'].dt.month
+        df['Month_Name'] = df['Date'].dt.strftime('%b')
+
+    print('\nHasil cleaning:')
+    print('Dataset 1:', df1.shape, '| missing:', df1.isnull().sum().sum())
+    print('Dataset 2:', df2.shape, '| missing:', df2.isnull().sum().sum())
+
+    return df1, df2
+
+
+# =========================================================================
+# 3. EXPLORATORY DATA ANALYSIS (EDA)
+# =========================================================================
+def eda(df1, df2, outdir='charts'):
+    import os
+    os.makedirs(outdir, exist_ok=True)
+
+    print('\n=== Statistik Deskriptif Dataset 1 ===')
+    print(df1[['Unemployment_Rate', 'Employed', 'Labour_Participation_Rate']].describe())
+
+    # Histogram distribusi
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
+    sns.histplot(df1['Unemployment_Rate'], bins=30, kde=True, ax=axes[0], color='#4C72B0')
+    axes[0].set_title('Distribusi Unemployment Rate (Dataset 1)')
+    sns.histplot(df2['Unemployment_Rate'], bins=30, kde=True, ax=axes[1], color='#DD8452')
+    axes[1].set_title('Distribusi Unemployment Rate (Dataset 2)')
+    plt.tight_layout()
+    plt.savefig(f'{outdir}/01_histogram_distribusi.png', bbox_inches='tight')
+    plt.close()
+
+    # Boxplot per Area & Zone
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
+    sns.boxplot(data=df1, x='Area', y='Unemployment_Rate', hue='Area', legend=False, ax=axes[0])
+    axes[0].set_title('Boxplot Unemployment Rate per Area')
+    sns.boxplot(data=df2, x='Zone', y='Unemployment_Rate', hue='Zone', legend=False, ax=axes[1])
+    axes[1].set_title('Boxplot Unemployment Rate per Zona')
+    axes[1].tick_params(axis='x', rotation=20)
+    plt.tight_layout()
+    plt.savefig(f'{outdir}/02_boxplot_area_zone.png', bbox_inches='tight')
+    plt.close()
+
+    # Line chart tren nasional
+    national_trend = df1.groupby('Date')['Unemployment_Rate'].mean().reset_index()
+    fig, ax = plt.subplots(figsize=(11, 5))
+    ax.plot(national_trend['Date'], national_trend['Unemployment_Rate'], marker='o')
+    ax.axvspan(pd.Timestamp('2020-03-01'), pd.Timestamp('2020-06-01'),
+               alpha=0.15, color='red', label='Periode Lockdown Covid-19')
+    ax.set_title('Tren Rata-rata Unemployment Rate Nasional')
+    ax.legend()
+    plt.tight_layout()
+    plt.savefig(f'{outdir}/03_line_tren_nasional.png', bbox_inches='tight')
+    plt.close()
+
+    # Bar chart rata-rata per Region
+    region_avg = df1.groupby('Region')['Unemployment_Rate'].mean().sort_values(ascending=False)
+    fig, ax = plt.subplots(figsize=(10, 7))
+    sns.barplot(x=region_avg.values, y=region_avg.index, hue=region_avg.index,
+                palette='viridis', legend=False, ax=ax)
+    ax.set_title('Rata-rata Unemployment Rate per State')
+    plt.tight_layout()
+    plt.savefig(f'{outdir}/04_bar_rata_rata_per_region.png', bbox_inches='tight')
+    plt.close()
+
+    # Heatmap korelasi
+    fig, ax = plt.subplots(figsize=(6, 5))
+    corr = df1[['Unemployment_Rate', 'Employed', 'Labour_Participation_Rate']].corr()
+    sns.heatmap(corr, annot=True, cmap='coolwarm', vmin=-1, vmax=1, ax=ax)
+    ax.set_title('Heatmap Korelasi Antar Variabel')
+    plt.tight_layout()
+    plt.savefig(f'{outdir}/06_heatmap_korelasi.png', bbox_inches='tight')
+    plt.close()
+
+    # Heatmap Region x Waktu
+    pivot = df1.pivot_table(index='Region', columns='Date', values='Unemployment_Rate', aggfunc='mean')
+    fig, ax = plt.subplots(figsize=(14, 9))
+    sns.heatmap(pivot, cmap='YlOrRd', ax=ax, cbar_kws={'label': 'Unemployment Rate (%)'})
+    ax.set_title('Heatmap Unemployment Rate: Region vs Waktu')
+    plt.tight_layout()
+    plt.savefig(f'{outdir}/07_heatmap_region_waktu.png', bbox_inches='tight')
+    plt.close()
+
+    return region_avg
+
+
+# =========================================================================
+# 4. ANALISIS DAMPAK COVID-19
+# =========================================================================
+def covid_impact_analysis(df1, df2, outdir='charts'):
+    df1 = df1.copy()
+    df1['Period'] = np.where(df1['Date'] < '2020-03-01', 'Sebelum Covid', 'Saat Covid')
+    pre = df1[df1['Period'] == 'Sebelum Covid']
+    during = df1[df1['Period'] == 'Saat Covid']
+
+    print('\n=== DAMPAK COVID-19 ===')
+    print('Rata-rata sebelum Covid :', round(pre['Unemployment_Rate'].mean(), 2), '%')
+    print('Rata-rata saat Covid    :', round(during['Unemployment_Rate'].mean(), 2), '%')
+
+    monthly = df1.groupby('Date')['Unemployment_Rate'].mean()
+    peak_date = monthly.idxmax()
+    print('Bulan lonjakan tertinggi:', peak_date.strftime('%Y-%m'), '->', round(monthly.max(), 2), '%')
+
+    impact = (during.groupby('Region')['Unemployment_Rate'].mean() -
+              pre.groupby('Region')['Unemployment_Rate'].mean()).dropna().sort_values(ascending=False)
+    print('\nTop 5 wilayah paling terdampak:\n', impact.head(5))
+    print('\nTop 5 wilayah paling stabil:\n', impact.tail(5))
+
+    # Bar chart sebelum vs saat covid
+    period_avg = df1.groupby('Period')['Unemployment_Rate'].mean()
+    fig, ax = plt.subplots(figsize=(6, 5))
+    ax.bar(period_avg.index, period_avg.values, color=['#4C72B0', '#C44E52'])
+    ax.set_title('Rata-rata Unemployment Rate: Sebelum vs Saat Covid-19')
+    plt.tight_layout()
+    plt.savefig(f'{outdir}/08_bar_sebelum_saat_covid.png', bbox_inches='tight')
+    plt.close()
+
+    # Line chart per zona (dataset 2)
+    zone_trend = df2.groupby(['Date', 'Zone'])['Unemployment_Rate'].mean().reset_index()
+    fig, ax = plt.subplots(figsize=(11, 5.5))
+    for z in zone_trend['Zone'].unique():
+        sub = zone_trend[zone_trend['Zone'] == z]
+        ax.plot(sub['Date'], sub['Unemployment_Rate'], marker='o', label=z)
+    ax.axvspan(pd.Timestamp('2020-03-01'), pd.Timestamp('2020-06-01'), alpha=0.12, color='red')
+    ax.set_title('Tren Unemployment Rate per Zona Geografis (2020)')
+    ax.legend()
+    plt.tight_layout()
+    plt.savefig(f'{outdir}/09_line_per_zona.png', bbox_inches='tight')
+    plt.close()
+
+    # Bar chart dampak per state
+    fig, ax = plt.subplots(figsize=(9, 7))
+    colors = ['#C44E52' if v > 0 else '#55A868' for v in impact.values]
+    sns.barplot(x=impact.values, y=impact.index, hue=impact.index, palette=colors, legend=False, ax=ax)
+    ax.axvline(0, color='black', linewidth=0.8)
+    ax.set_title('Perubahan Unemployment Rate per State (Saat Covid - Sebelum Covid)')
+    plt.tight_layout()
+    plt.savefig(f'{outdir}/10_bar_dampak_per_state.png', bbox_inches='tight')
+    plt.close()
+
+    return impact, peak_date
+
+
+# =========================================================================
+# 5. IDENTIFIKASI POLA & TREN (Outlier Detection)
+# =========================================================================
+def pattern_and_outliers(df1):
+    Q1 = df1['Unemployment_Rate'].quantile(0.25)
+    Q3 = df1['Unemployment_Rate'].quantile(0.75)
+    IQR = Q3 - Q1
+    lower, upper = Q1 - 1.5 * IQR, Q3 + 1.5 * IQR
+    outliers = df1[(df1['Unemployment_Rate'] < lower) | (df1['Unemployment_Rate'] > upper)]
+
+    print('\n=== DETEKSI OUTLIER (IQR method) ===')
+    print(f'Batas normal: {lower:.2f}% - {upper:.2f}%')
+    print(f'Jumlah outlier: {len(outliers)} dari {len(df1)} baris ({len(outliers)/len(df1)*100:.1f}%)')
+    print('\nDistribusi outlier per bulan:')
+    print(outliers['Date'].dt.to_period('M').value_counts().sort_index())
+
+    volatility = df1.groupby('Region')['Unemployment_Rate'].std().sort_values()
+    print('\nWilayah paling stabil (volatilitas terendah):\n', volatility.head(5))
+    print('\nWilayah paling volatil:\n', volatility.tail(5))
+
+    return outliers, volatility
+
+
+# =========================================================================
+# MAIN
+# =========================================================================
+if __name__ == '__main__':
+    df1, df2 = load_and_understand(PATH_DF1, PATH_DF2)
+    df1, df2 = clean_data(df1, df2)
+    region_avg = eda(df1, df2)
+    impact, peak_date = covid_impact_analysis(df1, df2)
+    outliers, volatility = pattern_and_outliers(df1)
+
+    print('\n=== ANALISIS SELESAI ===')
+    print('Seluruh chart telah disimpan di folder "charts/"')
