@@ -21,7 +21,7 @@ Proyek ini dibangun sebagai bagian dari portofolio Data Science untuk mendemonst
 
 ## 🌍 Background
 
-Tingkat pengangguran adalah salah satu indikator makroekonomi paling krusial dalam menilai kesehatan suatu perekonomian. Pengangguran yang tinggi berkorelasi dengan menurunnya daya beli masyarakat, meningkatnya risiko kemiskinan, serta potensi ketidakstabilan sosial-politik. Bagi pembuat kebijakan, memahami **kapan**, **di mana**, dan **seberapa besar** lonjakan pengangguran terjadi adalah prasyarat utama untuk merancang intervensi yang tepat sasaran — baik berupa bantuan sosial, stimulus ekonomi, maupun program pelatihan tenaga kerja.
+Tingkat pengangguran adalah salah satu indikator makroekonomi paling krusial dalam menilai kesehatan suatu perekonomian. Pengangguran yang tinggi berkorelasi dengan menurunnya daya beli masyarakat, meningkatnya risiko kemiskinan, serta potensi ketidakstabilan sosial-politik. Bagi pembuat kebijakan, memahami **kapan**, **di mana**, dan **seberapa besar** lonjakan pengangguran terjadi adalah prasyarat utama untuk merancang intervensi yang tepat sasaran, baik berupa bantuan sosial, stimulus ekonomi, maupun program pelatihan tenaga kerja.
 
 Pandemi Covid-19 menjadi salah satu guncangan ekonomi (*economic shock*) terbesar dalam sejarah modern, memaksa banyak negara (termasuk India) menerapkan lockdown ketat yang menghentikan aktivitas ekonomi secara mendadak. Peristiwa ini menciptakan "eksperimen alami" yang sangat berharga untuk dianalisis: bagaimana pasar tenaga kerja bereaksi terhadap guncangan eksternal berskala nasional, dan wilayah mana yang lebih rentan atau lebih resilien.
 
@@ -89,13 +89,13 @@ Proyek ini dirancang untuk menjawab pertanyaan-pertanyaan strategis berikut:
 
 ## 🔄 Data Analysis Workflow
 
-1. **Data Collection** — Mengumpulkan dua dataset publik terkait tingkat pengangguran India dari periode 2019–2020.
-2. **Data Cleaning** — Menghapus baris kosong dan duplikat, merapikan nama kolom, membersihkan whitespace pada data kategorikal, serta mengonversi kolom tanggal ke format `datetime`.
-3. **Data Transformation** — Mengganti nama kolom agar lebih ringkas, menambahkan kolom bantu waktu (`Year`, `Month`, `Month_Name`), dan membuat label periode (sebelum/saat Covid-19).
-4. **Exploratory Data Analysis (EDA)** — Menganalisis statistik deskriptif, distribusi, serta pola berdasarkan wilayah dan waktu menggunakan berbagai teknik visualisasi.
-5. **Trend Analysis** — Mengidentifikasi tren jangka pendek, volatilitas antarwilayah, serta mendeteksi outlier menggunakan metode IQR.
-6. **Covid-19 Impact Analysis** — Membandingkan periode sebelum dan selama Covid-19 secara kuantitatif untuk mengukur besar dan arah dampaknya di tingkat nasional maupun regional.
-7. **Insight Generation** — Menerjemahkan seluruh temuan statistik menjadi insight naratif dan rekomendasi kebijakan yang applicable.
+1. **Data Collection**: Mengumpulkan dua dataset publik terkait tingkat pengangguran India dari periode 2019–2020.
+2. **Data Cleaning**: Menghapus baris kosong dan duplikat, merapikan nama kolom, membersihkan whitespace pada data kategorikal, serta mengonversi kolom tanggal ke format `datetime`.
+3. **Data Transformation**: Mengganti nama kolom agar lebih ringkas, menambahkan kolom bantu waktu (`Year`, `Month`, `Month_Name`), dan membuat label periode (sebelum/saat Covid-19).
+4. **Exploratory Data Analysis (EDA)**: Menganalisis statistik deskriptif, distribusi, serta pola berdasarkan wilayah dan waktu menggunakan berbagai teknik visualisasi.
+5. **Trend Analysis**: Mengidentifikasi tren jangka pendek, volatilitas antarwilayah, serta mendeteksi outlier menggunakan metode IQR.
+6. **Covid-19 Impact Analysis**: Membandingkan periode sebelum dan selama Covid-19 secara kuantitatif untuk mengukur besar dan arah dampaknya di tingkat nasional maupun regional.
+7. **Insight Generation**: Menerjemahkan seluruh temuan statistik menjadi insight naratif dan rekomendasi kebijakan yang applicable.
 
 ---
 
@@ -129,7 +129,7 @@ Metrik yang dibandingkan antara lain rata-rata unemployment rate nasional, rata-
 
 ## 💡 Key Findings
 
-1. Rata-rata unemployment rate nasional naik dari **9,51% (sebelum Covid)** menjadi **17,77% (saat Covid)** — kenaikan sebesar **86,9%**.
+1. Rata-rata unemployment rate nasional naik dari **9,51% (sebelum Covid)** menjadi **17,77% (saat Covid)** kenaikan sebesar **86,9%**.
 2. Puncak krisis terjadi pada **Mei 2020 (24,88%)**, disusul April 2020 (23,64%), bertepatan persis dengan lockdown nasional ketat.
 3. Pemulihan terjadi cepat pada Juni 2020 (11,90%), namun **belum kembali ke level normal pra-pandemi**.
 4. **Puducherry** mencatat kenaikan tertinggi (+37,4 poin persentase), diikuti **Tamil Nadu** (+22,6 poin) dan **Jharkhand** (+22,1 poin).
@@ -138,7 +138,7 @@ Metrik yang dibandingkan antara lain rata-rata unemployment rate nasional, rata-
 7. Area **Urban** cenderung lebih rentan dibanding **Rural** terhadap guncangan ekonomi mendadak.
 8. **Zona West** (Gujarat, Maharashtra, dll.) menunjukkan resiliensi ekonomi terbaik secara nasional.
 9. **Zona East dan South** mengalami lonjakan paling ekstrem, masing-masing mencapai >33% pada April 2020.
-10. Sebanyak **4,7% observasi tergolong outlier statistik**, dan **80% di antaranya terkonsentrasi tepat di bulan puncak lockdown** — mengonfirmasi sifat sistemik dari krisis ini.
+10. Sebanyak **4,7% observasi tergolong outlier statistik**, dan **80% di antaranya terkonsentrasi tepat di bulan puncak lockdown** mengonfirmasi sifat sistemik dari krisis ini.
 11. Tidak ditemukan pola musiman (*seasonality*) yang kuat pada periode pra-pandemi, menandakan lonjakan yang teramati murni disebabkan oleh peristiwa eksogen.
 
 ---
