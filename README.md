@@ -241,10 +241,10 @@ jupyter notebook notebooks/unemployment_analysis.ipynb
 **[Nama Anda]**
 Data Analyst / Aspiring Data Scientist
 
-- 🔗 LinkedIn  : (https://www.linkedin.com/in/muhammad-fahrur-rozy-325931245/)
-- 💻 GitHub    : (https://github.com/PouBenParker)
+- 🔗 LinkedIn  : https://www.linkedin.com/in/muhammad-fahrur-rozy-325931245/
+- 💻 GitHub    : https://github.com/PouBenParker
 - 📧 Email     : fahrurozy1602@gmail.com
-- 📝 Portfolio : (https://myuniverseproject.wordpress.com/)
+- 📝 Portfolio : https://myuniverseproject.wordpress.com/
 
 ---
 
